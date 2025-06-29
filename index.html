@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MariiaMonk</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #faf6f9;
+            --text-color: #3a3a55;
+            --primary-color: #9d65c9;
+            --secondary-color: #7b4dae;
+            --accent-color: #e39ff6;
+            --soft-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a2e;
+            --text-color: #e2e2f6;
+            --primary-color: #bb86fc;
+            --secondary-color: #9a67ea;
+            --accent-color: #d1a6ff;
+            --soft-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 20px;
+        }
+
+        .tab {
+            cursor: pointer;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .tab:hover, .tab.active {
+            color: var(--primary-color);
+            background-color: rgba(157, 101, 201, 0.1);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .language-switcher {
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-color);
+            font-size: 14px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-color);
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(25deg);
+        }
+
+        .content {
+            min-height: 70vh;
+            padding: 40px 0;
+        }
+
+        /* Home Page */
+        .home-content {
+            text-align: center;
+        }
+
+        .intro h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .typing-text {
+            font-size: 1.5rem;
+            min-height: 2.5rem;
+            margin-bottom: 40px;
+            color: var(--secondary-color);
+            font-weight: 300;
+        }
+
+        .snake-game-container {
+            max-width: 400px;
+            margin: 0 auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--soft-shadow);
+            position: relative;
+        }
+
+        #snake-game {
+            width: 100%;
+            height: 400px;
+            background-color: var(--bg-color);
+            display: block;
+            touch-action: none;
+        }
+
+        .game-controls {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .game-btn {
+            padding: 8px 24px;
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .game-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Mobile game controls */
+        .mobile-controls {
+            display: none;
+            grid-template-areas:
+                ". up ."
+                "left . right"
+                ". down .";
+            gap: 10px;
+            margin-top: 20px;
+            touch-action: none;
+        }
+
+        .mobile-controls button {
+            background-color: rgba(157, 101, 201, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            color: var(--primary-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .mobile-controls button:active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .up-btn { grid-area: up; }
+        .down-btn { grid-area: down; }
+        .left-btn { grid-area: left; }
+        .right-btn { grid-area: right; }
+
+        /* About Page */
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about-content h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .education-section {
+            margin-bottom: 30px;
+        }
+
+        .education-item {
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.03);
+            border-radius: 8px;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .education-item.collapsed {
+            max-height: 60px;
+        }
+
+        .education-item.collapsed .education-details {
+            display: none;
+        }
+
+        .education-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .education-item h4 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        .education-item .years {
+            font-style: italic;
+            color: var(--secondary-color);
+        }
+
+        .education-item ul {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        .education-item li {
+            margin-bottom: 5px;
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s;
+        }
+
+        .education-item.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+
+        /* Contacts Page */
+        .contacts-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contacts-content h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .contact-methods {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background-color: rgba(0, 0, 0, 0.03);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .contact-item:hover {
+            background-color: rgba(157, 101, 201, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .contact-item a {
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .contact-form {
+            background-color: rgba(0, 0, 0, 0.03);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--soft-shadow);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(157, 101, 201, 0.2);
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            display: none;
+            text-align: center;
+        }
+
+        .form-message.success {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+            display: block;
+        }
+
+        .form-message.error {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+            display: block;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .intro h1 {
+                font-size: 2.2rem;
+            }
+            
+            .typing-text {
+                font-size: 1.2rem;
+            }
+            
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .mobile-controls {
+                display: grid;
+            }
+
+            .contact-form {
+                padding: 20px;
+            }
+
+            .snake-game-container {
+                max-width: 100%;
+            }
+
+            #snake-game {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .contact-methods {
+                flex-direction: column;
+            }
+
+            .contact-item {
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            #snake-game {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="tabs">
+                <div class="tab active" data-tab="home">Home</div>
+                <div class="tab" data-tab="about">About Me</div>
+                <div class="tab" data-tab="contacts">Contacts</div>
+            </div>
+            <div class="header-right">
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="ru">RU</button>
+                </div>
+                <button class="theme-toggle" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <main class="content">
+            <!-- Home Page -->
+            <div id="home" class="page-content">
+                <div class="home-content">
+                    <div class="intro">
+                        <h1 data-i18n="home.title">Hi, I'm mariia</h1>
+                        <div class="typing-text" id="typing-text"></div>
+                    </div>
+                    <div class="snake-game-container">
+                        <canvas id="snake-game"></canvas>
+                    </div>
+                    <div class="game-controls">
+                        <button class="game-btn" id="start-game" data-i18n="game.start">Start</button>
+                        <button class="game-btn" id="reset-game" data-i18n="game.reset">Reset</button>
+                    </div>
+                    <div class="mobile-controls">
+                        <button class="up-btn"><i class="fas fa-arrow-up"></i></button>
+                        <button class="left-btn"><i class="fas fa-arrow-left"></i></button>
+                        <button class="right-btn"><i class="fas fa-arrow-right"></i></button>
+                        <button class="down-btn"><i class="fas fa-arrow-down"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Page -->
+            <div id="about" class="page-content hidden">
+                <div class="about-content">
+                    <h2 data-i18n="about.title">About Me</h2>
+                    <p data-i18n="about.text1">
+                        I'm a passionate C++ developer with a strong foundation in computer science. Currently pursuing my degree at MEPHI (National Research Nuclear University), I combine academic knowledge with practical skills to solve complex problems.
+                    </p>
+                    <p data-i18n="about.text2">
+                        My technical expertise includes algorithms, data structures, and software development principles. I'm particularly interested in performance optimization and system-level programming.
+                    </p>
+                    
+                    <div class="education-section">
+                        <h3 data-i18n="about.education">Education</h3>
+                        
+                        <div class="education-item collapsed">
+                            <div class="education-item-header">
+                                <div>
+                                    <h4 data-i18n="about.mephi">MEPHI - National Research Nuclear University</h4>
+                                    <span class="years" data-i18n="about.years_mephi">2023 - 2027</span>
+                                </div>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                            <div class="education-details">
+                                <p data-i18n="about.degree">Bachelor's degree in Computer Science</p>
+                                <ul>
+                                    <li data-i18n="about.mephi_achievement1">Successful participation in scientific student sessions</li>
+                                    <li data-i18n="about.mephi_achievement2">Striving for professional growth as a C++ developer</li>
+                                    <li data-i18n="about.mephi_achievement3">Gaining experience working in teams with highly qualified specialists</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="education-item collapsed">
+                            <div class="education-item-header">
+                                <div>
+                                    <h4 data-i18n="about.moscow_school">Moscow School of Programmers</h4>
+                                    <span class="years" data-i18n="about.years_moscow">2018 - 2022</span>
+                                </div>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                            <div class="education-details">
+                                <ul>
+                                    <li data-i18n="about.moscow_skill1">Programming in Python, C++, C#</li>
+                                    <li data-i18n="about.moscow_skill2">Discrete mathematics</li>
+                                    <li data-i18n="about.moscow_skill3">Computer networks</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="education-item collapsed">
+                            <div class="education-item-header">
+                                <div>
+                                    <h4 data-i18n="about.worldskills">WorldSkills Russia Juniors</h4>
+                                    <span class="years" data-i18n="about.years_worldskills">2018 - 2020</span>
+                                </div>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                            <div class="education-details">
+                                <ul>
+                                    <li data-i18n="about.worldskills_achievement1">Competitions in "Space Systems Engineering" as a C developer</li>
+                                    <li data-i18n="about.worldskills_achievement2">Participation in specialized teams in Orlyonok</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="education-section">
+                        <h3 data-i18n="about.skills">Skills</h3>
+                        <ul>
+                            <li data-i18n="about.skill1">Proficient in C++ (STL, Boost, Qt)</li>
+                            <li data-i18n="about.skill2">Experience with Python, Java, and JavaScript</li>
+                            <li data-i18n="about.skill3">Knowledge of algorithms and data structures</li>
+                            <li data-i18n="about.skill4">Understanding of OOP principles and design patterns</li>
+                            <li data-i18n="about.skill5">Version control with Git</li>
+                            <li data-i18n="about.skill6">Using CMake and Make</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contacts Page -->
+    <div id="contacts" class="page-content hidden">
+        <div class="contacts-content">
+            <h2 data-i18n="contacts.title">Get In Touch</h2>
+            
+            <div class="contact-methods">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:mariiaromanenk@yandex.ru" data-i18n="contacts.email">mariiaromanenk@yandex.ru</a>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-github"></i>
+                    <a href="https://github.com/mariiamonk" target="_blank" data-i18n="contacts.github">GitHub</a>
+                </div>
+                
+                <div class="contact-item">
+                    <i class="fa fa-id-card"></i>
+                    <a href="https://t.me/mariia_monk" target="_blank" data-i18n="contacts.telegram">Telegram</a>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-telegram"></i>
+                    <a href="https://t.me/marshrutkatg" target="_blank" data-i18n="contacts.telegram_channel">Telegram Channel</a>
+                </div>
+            </div>
+            
+            <div class="contact-form">
+                <h3 data-i18n="contacts.form_title">Send me a message</h3>
+                <form id="message-form" method="POST">
+                    <div class="form-group">
+                        <label for="name" data-i18n="contacts.name">Your Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" data-i18n="contacts.email_field">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message" data-i18n="contacts.message">Message</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn" data-i18n="contacts.send">Send Message</button>
+                </form>
+                <div id="form-message" class="form-message"></div>
+            </div>
+        </div>
+    </div>
+        </main>
+    </div>
+
+    <script>
+        // Age calculation
+        const birthYear = 2004;
+        const currentYear = new Date().getFullYear();
+        const age = currentYear - birthYear;
+
+        // Translations
+        const translations = {
+            en: {
+                "home.title": `Hi, I'm Mariia`,
+                "home.subtitles": [
+                    `C++ Developer `,
+                    `MEPHI Computer Science Student `,
+                    `${age} y.o. `,
+                ],
+                "game.start": "Start",
+                "game.pause": "Pause",
+                "game.reset": "Reset",
+                "game.score": "Score",
+                "about.title": "About Me",
+                "about.text1": "My name is Masha. I live and study in Moscow. I like to cook, go for walks, and attend interesting events.",
+                "about.text2": "Beginner C++ developer. I can write clean and readable code, analyze tasks, and find optimal approaches. I am striving for professional growth as a Backend developer.",
+                "about.education": "Education",
+                "about.mephi": "MEPHI - National Research Nuclear University",
+                "about.years_mephi": "2023 - 2027",
+                "about.degree": "Bachelor's degree in Computer Science",
+                "about.mephi_achievement1": "non",
+                "about.mephi_achievement2": "Study of key disciplines: C programming, algorithms and data structures, object-oriented programming in C++, and theory of automata.",
+                "about.mephi_achievement3": "non",
+                "about.moscow_school": "Moscow School of Programmers",
+                "about.years_moscow": "2018 - 2022",
+                "about.moscow_skill1": "Programming in Python, C++, C#",
+                "about.moscow_skill2": "Discrete mathematics",
+                "about.moscow_skill3": "Computer networks",
+                "about.worldskills": "WorldSkills Russia Juniors",
+                "about.years_worldskills": "2018 - 2020",
+                "about.worldskills_achievement1": "Competitions in 'Space Systems Engineering' as a C developer",
+                "about.worldskills_achievement2": "Participation in specialized teams in Orlyonok",
+                "about.skills": "Skills",
+                "about.skill1": "С/С++(STL, Boost, Qt)",
+                "about.skill2": "OOP",
+                "about.skill3": "Knowledge of algorithms and data structures",
+                "about.skill4": "Using CMake and Make",
+                "about.skill5": "Git, GitHub",
+                "about.skill6": "Experience with Python, Java, and JavaScript",
+                "contacts.title": "Get In Touch",
+                "contacts.email": "mariiaromanenk@yandex.ru",
+                "contacts.github": "github",
+                "contacts.hh.ru": "hh.ru",
+                "contacts.telegram": "tg",
+                "contacts.telegram_channel": "tgchannel",
+                "contacts.form_title": "Send me a message",
+                "contacts.name": "Your Name",
+                "contacts.email_field": "Email",
+                "contacts.message": "Message",
+                "contacts.send": "Send Message",
+                "form.success": "Message sent successfully!",
+                "form.error": "Error sending message. Please try again later."
+            },
+            ru: {
+                "home.title": "Привет, я Мария",
+                "home.subtitles": [
+                    "Разработчик C++ ",
+                    "Студентка ИВТ МИФИ ",
+                    `Мне ${age} `
+                ],
+                "game.start": "Старт",
+                "game.pause": "Пауза",
+                "game.reset": "Сброс",
+                "game.score": "Счёт",
+                "about.title": "Обо мне",
+                "about.text1": "Меня зовут Маша. Я живу и учусь в Москве. Люблю готовить, гулять и ходить на интересные мероприятия.",
+                "about.text2": "Я начинающий разработчик на С++. Пишу понятный и аккуратный код. Анализирую задачи и ищу лучшие решения. Стремлюсь к профессиональному росту в качестве Backend - разработчика.",
+                "about.education": "Образование",
+                "about.mephi": "НИЯУ МИФИ",
+                "about.years_mephi": "2023 - 2027",
+                "about.degree": "Бакалавр ИВТ",
+                "about.mephi_achievement1": "пусто",
+                "about.mephi_achievement2": "Изучение ключевых дисциплин: программирование на C, алгоритмы и структуры данных, объектно-ориентированное программирование на C++, теория автоматов.",
+                "about.mephi_achievement3": "пусто",
+                "about.moscow_school": "Московская школа программистов",
+                "about.years_moscow": "2018 - 2020",
+                "about.moscow_skill1": "Программирование на Python, C++, C#",
+                "about.moscow_skill2": "Дискретная математика",
+                "about.moscow_skill3": "Компьютерные сети",
+                "about.worldskills": "WorldSkills Russia Juniors",
+                "about.years_worldskills": "2018 - 2020",
+                "about.worldskills_achievement1": "Соревнования по направлению 'Инженерия космических систем' в качестве разработчика на C",
+                "about.worldskills_achievement2": "Посещение профильных отрядов в Орленке",
+                "about.skills": "Навыки",
+                "about.skill1": "С/С++(STL, Boost, Qt)",
+                "about.skill2": "Объектно-ориентированное программирование на С++",
+                "about.skill3": "Алгоритмы и структуры данных",
+                "about.skill4": "Использование CMake и Make",
+                "about.skill5": "Git, GitHub",
+                "about.skill6": "Опыт работы с Python, Java и JavaScript",
+                "contacts.title": "Свяжитесь со мной",
+                "contacts.email": "mariiaromanenk@yandex.ru",
+                "contacts.github": "github",
+                "contacts.hh.ru": "hh.ru",
+                "contacts.telegram": "тг",
+                "contacts.telegram_channel": "тгканал",
+                "contacts.form_title": "Отправить сообщение",
+                "contacts.name": "Ваше имя",
+                "contacts.email_field": "Email",
+                "contacts.message": "Сообщение",
+                "contacts.send": "Отправить",
+                "form.success": "Сообщение успешно отправлено!",
+                "form.error": "Ошибка при отправке сообщения. Пожалуйста, попробуйте позже."
+            }
+        };
+
+        // Current language
+        let currentLang = 'en';
+
+        // DOM elements
+        const tabs = document.querySelectorAll('.tab');
+        const pages = document.querySelectorAll('.page-content');
+        const langButtons = document.querySelectorAll('.lang-btn');
+        const themeToggle = document.querySelector('.theme-toggle');
+        const typingTextElement = document.getElementById('typing-text');
+        const startGameBtn = document.getElementById('start-game');
+        const resetGameBtn = document.getElementById('reset-game');
+        const messageForm = document.getElementById('message-form');
+        const formMessage = document.getElementById('form-message');
+        const educationItems = document.querySelectorAll('.education-item');
+        const mobileControls = {
+            up: document.querySelector('.up-btn'),
+            down: document.querySelector('.down-btn'),
+            left: document.querySelector('.left-btn'),
+            right: document.querySelector('.right-btn')
+        };
+
+        // Tab switching
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                const tabName = tab.getAttribute('data-tab');
+                pages.forEach(page => {
+                    page.classList.add('hidden');
+                    if (page.id === tabName) {
+                        page.classList.remove('hidden');
+                    }
+                });
+            });
+        });
+
+        // Language switching
+        langButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                langButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentLang = btn.getAttribute('data-lang');
+                translatePage();
+                
+                // Update game button text if game is running
+                if (isGameRunning) {
+                    startGameBtn.textContent = translations[currentLang]['game.pause'];
+                } else {
+                    startGameBtn.textContent = translations[currentLang]['game.start'];
+                }
+            });
+        });
+
+        // Theme switching
+        themeToggle.addEventListener('click', () => {
+            document.body.setAttribute('data-theme', 
+                document.body.getAttribute('data-theme') === 'dark' ? '' : 'dark');
+            
+            const icon = themeToggle.querySelector('i');
+            if (document.body.getAttribute('data-theme') === 'dark') {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+            
+            // Redraw game to match new theme
+            if (canvas) draw();
+        });
+
+        // Translate page
+        function translatePage() {
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[currentLang][key]) {
+                    if (key === 'home.subtitles') {
+                        // Special handling for subtitles (handled by typing effect)
+                        return;
+                    }
+                    element.textContent = translations[currentLang][key];
+                }
+            });
+            
+            // Update typing subtitles if on home page
+            if (document.querySelector('.tab.active').getAttribute('data-tab') === 'home') {
+                clearTimeout(typingTimeout);
+                currentSubtitle = '';
+                typingIndex = 0;
+                isDeleting = false;
+                startTypingEffect();
+            }
+        }
+
+        // Typing effect
+        let typingIndex = 0;
+        let typingTimeout;
+        let isDeleting = false;
+        let currentSubtitle = '';
+        let typingSpeed = 150; // Slower than before
+
+        function startTypingEffect() {
+            const subtitles = translations[currentLang]['home.subtitles'];
+            const fullText = subtitles[typingIndex];
+            
+            if (isDeleting) {
+                currentSubtitle = fullText.substring(0, currentSubtitle.length - 1);
+            } else {
+                currentSubtitle = fullText.substring(0, currentSubtitle.length + 1);
+            }
+            
+            typingTextElement.textContent = currentSubtitle;
+            
+            if (!isDeleting && currentSubtitle === fullText) {
+                typingSpeed = 1500; // Longer pause at end of sentence
+                isDeleting = true;
+            } else if (isDeleting && currentSubtitle === '') {
+                isDeleting = false;
+                typingIndex = (typingIndex + 1) % subtitles.length;
+                typingSpeed = 150;
+            } else {
+                typingSpeed = isDeleting ? 75 : 150;
+            }
+            
+            typingTimeout = setTimeout(startTypingEffect, typingSpeed);
+        }
+
+        // Education items toggle
+        educationItems.forEach(item => {
+            const header = item.querySelector('.education-item-header');
+            header.addEventListener('click', () => {
+                item.classList.toggle('collapsed');
+            });
+        });
+
+        // Snake Game
+        const canvas = document.getElementById('snake-game');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas size
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+        
+        // Game variables
+        let snake = [];
+        let food = {};
+        let direction = 'right';
+        let nextDirection = 'right';
+        let gameSpeed = 100;
+        let gameLoop;
+        let score = 0;
+        let isGameRunning = false;
+        
+        // Initialize game
+        function initGame() {
+            // Create initial snake
+            snake = [
+                {x: 5, y: 10},
+                {x: 4, y: 10},
+                {x: 3, y: 10}
+            ];
+            
+            // Create first food
+            createFood();
+            
+            // Reset direction
+            direction = 'right';
+            nextDirection = 'right';
+            
+            // Reset score
+            score = 0;
+        }
+        
+        // Create food at random position
+        function createFood() {
+            const gridSize = 20;
+            const maxX = Math.floor(canvas.width / gridSize);
+            const maxY = Math.floor(canvas.height / gridSize);
+            
+            food = {
+                x: Math.floor(Math.random() * maxX),
+                y: Math.floor(Math.random() * maxY)
+            };
+            
+            // Make sure food doesn't appear on snake
+            for (let segment of snake) {
+                if (segment.x === food.x && segment.y === food.y) {
+                    return createFood();
+                }
+            }
+        }
+        
+        // Draw game state
+        function draw() {
+            // Clear canvas
+            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--bg-color');
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw grid (very subtle)
+            ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--bg-color');
+            ctx.lineWidth = 0.5;
+            const gridSize = 20;
+            
+            for (let x = 0; x < canvas.width; x += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            
+            for (let y = 0; y < canvas.height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+            
+            // Draw snake
+            const snakeColor = getComputedStyle(document.body).getPropertyValue('--primary-color');
+            const snakeHeadColor = getComputedStyle(document.body).getPropertyValue('--secondary-color');
+            
+            for (let i = 0; i < snake.length; i++) {
+                ctx.fillStyle = i === 0 ? snakeHeadColor : snakeColor;
+                ctx.beginPath();
+                ctx.roundRect(snake[i].x * 20 + 1, snake[i].y * 20 + 1, 18, 18, 4);
+                ctx.fill();
+            }
+            
+            // Draw food
+            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--accent-color');
+            ctx.beginPath();
+            ctx.roundRect(food.x * 20 + 1, food.y * 20 + 1, 18, 18, 9);
+            ctx.fill();
+            
+            // Draw score
+            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text-color');
+            ctx.font = '16px Arial';
+            ctx.fillText(`${translations[currentLang]['game.score'] || 'Score'}: ${score}`, 10, 20);
+        }
+        
+        
+        // Update game state
+        function update() {
+            // Update direction
+            direction = nextDirection;
+            
+            // Move snake
+            const head = {x: snake[0].x, y: snake[0].y};
+            
+            switch (direction) {
+                case 'up':
+                    head.y--;
+                    break;
+                case 'down':
+                    head.y++;
+                    break;
+                case 'left':
+                    head.x--;
+                    break;
+                case 'right':
+                    head.x++;
+                    break;
+            }
+            
+            // Wrap around edges instead of dying
+            const gridSize = 20;
+            const maxX = Math.floor(canvas.width / gridSize);
+            const maxY = Math.floor(canvas.height / gridSize);
+            
+            if (head.x < 0) head.x = maxX - 1;
+            if (head.x >= maxX) head.x = 0;
+            if (head.y < 0) head.y = maxY - 1;
+            if (head.y >= maxY) head.y = 0;
+            
+            // Check collision with self
+            for (let i = 0; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    gameOver();
+                    return;
+                }
+            }
+            
+            // Add new head
+            snake.unshift(head);
+            
+            // Check if snake ate food
+            if (head.x === food.x && head.y === food.y) {
+                score++;
+                createFood();
+                
+                // Increase speed every 5 points
+                if (score % 5 === 0 && gameSpeed > 50) {
+                    gameSpeed -= 5;
+                    clearInterval(gameLoop);
+                    gameLoop = setInterval(gameStep, gameSpeed);
+                }
+            } else {
+                // Remove tail if no food was eaten
+                snake.pop();
+            }
+        }
+        
+        // Game step
+        function gameStep() {
+            update();
+            draw();
+        }
+        
+        // Start game
+        function startGame() {
+            if (isGameRunning) {
+                pauseGame();
+                return;
+            }
+            
+            initGame();
+            isGameRunning = true;
+            gameLoop = setInterval(gameStep, gameSpeed);
+            startGameBtn.textContent = translations[currentLang]['game.pause'];
+            draw();
+        }
+        
+        // Pause game
+        function pauseGame() {
+            if (!isGameRunning) return;
+            
+            clearInterval(gameLoop);
+            isGameRunning = false;
+            startGameBtn.textContent = translations[currentLang]['game.start'];
+        }
+        
+        // Game over
+        function gameOver() {
+            clearInterval(gameLoop);
+            isGameRunning = false;
+            startGameBtn.textContent = translations[currentLang]['game.start'];
+            
+            // Flash snake red to indicate game over
+            const originalColors = {
+                snake: getComputedStyle(document.body).getPropertyValue('--primary-color'),
+                head: getComputedStyle(document.body).getPropertyValue('--secondary-color')
+            };
+            
+            let flashCount = 0;
+            const flashInterval = setInterval(() => {
+                if (flashCount % 2 === 0) {
+                    // Flash red
+                    ctx.fillStyle = '#ff6b6b';
+                    for (let i = 0; i < snake.length; i++) {
+                        ctx.beginPath();
+                        ctx.roundRect(snake[i].x * 20 + 1, snake[i].y * 20 + 1, 18, 18, 4);
+                        ctx.fill();
+                    }
+                } else {
+                    // Restore colors
+                    for (let i = 0; i < snake.length; i++) {
+                        ctx.fillStyle = i === 0 ? originalColors.head : originalColors.snake;
+                        ctx.beginPath();
+                        ctx.roundRect(snake[i].x * 20 + 1, snake[i].y * 20 + 1, 18, 18, 4);
+                        ctx.fill();
+                    }
+                }
+                
+                flashCount++;
+                if (flashCount >= 6) {
+                    clearInterval(flashInterval);
+                    draw();
+                }
+            }, 200);
+        }
+        
+        // Event listeners for game controls
+        startGameBtn.addEventListener('click', startGame);
+        
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            if (!isGameRunning) return;
+            
+            switch (e.key) {
+                case 'ArrowUp':
+                    if (direction !== 'down') nextDirection = 'up';
+                    break;
+                case 'ArrowDown':
+                    if (direction !== 'up') nextDirection = 'down';
+                    break;
+                case 'ArrowLeft':
+                    if (direction !== 'right') nextDirection = 'left';
+                    break;
+                case 'ArrowRight':
+                    if (direction !== 'left') nextDirection = 'right';
+                    break;
+                case ' ':
+                    pauseGame();
+                    break;
+            }
+        });
+        
+        // Form submission
+        messageForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(messageForm);
+            const submitBtn = messageForm.querySelector('.submit-btn');
+            const originalBtnText = submitBtn.textContent;
+            
+            try {
+                // Показать состояние загрузки
+                submitBtn.disabled = true;
+                submitBtn.textContent = currentLang === 'en' ? 'Sending...' : 'Отправка...';
+                
+                //Отправка через Formspree (бесплатный сервис для обработки форм)
+                const response = await fetch('https://formspree.io/f/mariiaromanenk@yandex.ru', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                
+                if (response.ok) {
+                    // Успешная отправка
+                    formMessage.textContent = translations[currentLang]['form.success'];
+                    formMessage.className = 'form-message success';
+                    formMessage.style.display = 'block';
+                    messageForm.reset();
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                formMessage.textContent = translations[currentLang]['form.error'];
+                formMessage.className = 'form-message error';
+                formMessage.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
+                
+                // Скрыть сообщение через 5 секунд
+                setTimeout(() => {
+                    formMessage.style.display = 'none';
+                }, 5000);
+            }
+        });
+        
+        // Initialize
+        translatePage();
+        startTypingEffect();
+        
+        // Add score translation if missing
+        if (!translations.en['game.score']) {
+            translations.en['game.score'] = 'Score';
+            translations.ru['game.score'] = 'Счёт';
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            if (isGameRunning) draw();
+        });
+    </script>
+</body>
+</html>
