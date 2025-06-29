@@ -186,7 +186,7 @@
             margin-top: 20px;
             touch-action: none;
         }
-
+        
         .mobile-controls button {
             background-color: rgba(157, 101, 201, 0.1);
             border: none;
@@ -202,16 +202,22 @@
             user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
-
+        
         .mobile-controls button:active {
             background-color: var(--primary-color);
             color: white;
         }
-
+        
         .up-btn { grid-area: up; }
         .down-btn { grid-area: down; }
         .left-btn { grid-area: left; }
         .right-btn { grid-area: right; }
+        
+        @media (max-width: 768px) {
+            .mobile-controls {
+                display: grid;
+            }
+        }
 
         /* About Page */
         .about-content {
@@ -1139,43 +1145,51 @@
                     break;
             }
         });
-        
-                // Mobile controls event listeners
-        mobileControls.up.addEventListener('click', () => {
+
+        mobileControls.up.addEventListener('mousedown', () => {
             if (direction !== 'down') nextDirection = 'up';
         });
-        
-        mobileControls.down.addEventListener('click', () => {
-            if (direction !== 'up') nextDirection = 'down';
-        });
-        
-        mobileControls.left.addEventListener('click', () => {
-            if (direction !== 'right') nextDirection = 'left';
-        });
-        
-        mobileControls.right.addEventListener('click', () => {
-            if (direction !== 'left') nextDirection = 'right';
-        });
-        
-        // Prevent touch events from interfering with game
         mobileControls.up.addEventListener('touchstart', (e) => {
             e.preventDefault();
             if (direction !== 'down') nextDirection = 'up';
         });
         
+        mobileControls.down.addEventListener('mousedown', () => {
+            if (direction !== 'up') nextDirection = 'down';
+        });
         mobileControls.down.addEventListener('touchstart', (e) => {
             e.preventDefault();
             if (direction !== 'up') nextDirection = 'down';
         });
         
+        mobileControls.left.addEventListener('mousedown', () => {
+            if (direction !== 'right') nextDirection = 'left';
+        });
         mobileControls.left.addEventListener('touchstart', (e) => {
             e.preventDefault();
             if (direction !== 'right') nextDirection = 'left';
         });
         
+        mobileControls.right.addEventListener('mousedown', () => {
+            if (direction !== 'left') nextDirection = 'right';
+        });
         mobileControls.right.addEventListener('touchstart', (e) => {
             e.preventDefault();
             if (direction !== 'left') nextDirection = 'right';
+        });
+        
+        // Prevent page scrolling when touching controls
+        [mobileControls.up, mobileControls.down, mobileControls.left, mobileControls.right].forEach(btn => {
+            btn.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+            }, { passive: false });
+        });
+        
+        // Disable context menu on long press
+        [mobileControls.up, mobileControls.down, mobileControls.left, mobileControls.right].forEach(btn => {
+            btn.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+            });
         });
         
         // Form submission
